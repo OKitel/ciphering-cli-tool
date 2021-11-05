@@ -1,0 +1,24 @@
+{
+  "name": "ciphering-cli-tool",
+  "version": "1.0.0",
+  "description": "CLI tool that encode and decode a text by 3 substitution ciphers",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OKitel/ciphering-cli-tool.git"
+  },
+  "keywords": [],
+  "author": "Olga Kitel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OKitel/ciphering-cli-tool/issues"
+  },
+  "homepage": "https://github.com/OKitel/ciphering-cli-tool#readme",
+  "dependencies": {
+    "nodemon": "^2.0.14"
+  }
+}
