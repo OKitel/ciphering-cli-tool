@@ -1,14 +1,14 @@
 import { alphabet, alphabetLength } from "./alphabet.js";
 
 export const ceasarEncode = (message) => {
-  return cyperInternal(+1, message);
+  return cipherInternal(+1, message);
 };
 
 export const ceasarDecode = (message) => {
-  return cyperInternal(-1, message);
+  return cipherInternal(-1, message);
 };
 
-const cyperInternal = (shift, message) => {
+const cipherInternal = (shift, message) => {
   const mesArr = message.split("");
   let result = [];
   for (let i = 0; i < mesArr.length; i++) {
