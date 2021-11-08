@@ -2,11 +2,10 @@
   "name": "ciphering-cli-tool",
   "version": "1.0.0",
   "description": "CLI tool that encode and decode a text by 3 substitution ciphers",
-  "main": "src/ciphers/rot-8.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon"
+    "lint": "eslint . --ext .js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +18,12 @@
     "url": "https://github.com/OKitel/ciphering-cli-tool/issues"
   },
   "homepage": "https://github.com/OKitel/ciphering-cli-tool#readme",
-  "dependencies": {
-    "nodemon": "^2.0.14"
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "nodemon": "^2.0.14",
+    "prettier": "^2.4.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.4.1"
   }
 }
