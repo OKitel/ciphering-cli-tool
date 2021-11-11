@@ -1,6 +1,7 @@
 const { stderr, exit } = process;
 let flags = process.argv;
 const possibleCipher = ["C0", "C1", "R0", "R1", "A", "A0", "A1"];
+const possibleOptions = ["-c", "--config", "-i", "input", "-o", "--output"];
 
 const checkCipherSequence = (config) => {
   let isOk = true;
@@ -26,4 +27,13 @@ if (flags[2] === "-c" || flags[2] === "--config") {
 } else {
   stderr.write("Please enter config flag: index.js -c");
   exit(1);
+}
+
+for (let i = 0; i < possibleOptions.length; i++) {
+  if (
+    flags.indexOf(possibleOptions[i]) !== flags.lastIndexOf(possibleOptions[i])
+  ) {
+    stderr.write(`Please, do not duplicate option ${possibleOptions[i]}.`);
+    exit(4);
+  }
 }
