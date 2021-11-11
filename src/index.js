@@ -1,9 +1,11 @@
 const { stderr, exit } = process;
-let flags = process.argv;
-const possibleCipher = ["C0", "C1", "R0", "R1", "A", "A0", "A1"];
+let options = process.argv;
+const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
 const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
-const includesInputOption = flags.includes("-i") || flags.includes("--input");
-const includesOutputOption = flags.includes("-o") || flags.includes("--output");
+const includesInputOption =
+  options.includes("-i") || options.includes("--input");
+const includesOutputOption =
+  options.includes("-o") || options.includes("--output");
 console.log(includesInputOption, includesOutputOption);
 
 const checkCipherSequence = (config) => {
@@ -25,8 +27,8 @@ const checkCipherSequence = (config) => {
   }
 };
 
-if (flags[2] === "-c" || flags[2] === "--config") {
-  checkCipherSequence(flags[3]);
+if (options[2] === "-c" || options[2] === "--config") {
+  checkCipherSequence(options[3]);
 } else {
   stderr.write("Please enter config flag: index.js -c");
   exit(1);
@@ -34,7 +36,8 @@ if (flags[2] === "-c" || flags[2] === "--config") {
 
 for (let i = 0; i < possibleOptions.length; i++) {
   if (
-    flags.indexOf(possibleOptions[i]) !== flags.lastIndexOf(possibleOptions[i])
+    options.indexOf(possibleOptions[i]) !==
+    options.lastIndexOf(possibleOptions[i])
   ) {
     stderr.write(`Please, do not duplicate option ${possibleOptions[i]}.`);
     exit(4);
