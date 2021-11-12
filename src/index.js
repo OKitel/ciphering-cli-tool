@@ -1,45 +1,62 @@
-const { stderr, exit } = process;
-let options = process.argv;
-const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
-const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
-const includesInputOption =
-  options.includes("-i") || options.includes("--input");
-const includesOutputOption =
-  options.includes("-o") || options.includes("--output");
-console.log(includesInputOption, includesOutputOption);
+import fs from "fs";
+import { pipeline } from "stream";
+import {
+  options,
+  checkConfigOption,
+  checkDuplicatedFunctions,
+} from "./validation.js";
+const { stdin, stdout } = process;
+let inputOption;
+let outputOption;
+let inputFile;
+let outputFile;
 
-const checkCipherSequence = (config) => {
-  let isOk = true;
-  if (config === "" || config === undefined) {
-    stderr.write("Please enter cipher config.");
-    exit(2);
+const checkOptions = (options) => {
+  if (options.indexOf("-i") === -1 && options.indexOf("--input") === -1) {
+    inputOption = undefined;
+  } else if (options.indexOf("-i") === -1) {
+    inputOption = "--input";
+  } else {
+    inputOption = "-i";
   }
-  const configArr = config.split("-");
-  for (let i = 0; i < configArr.length; i++) {
-    if (!possibleCipher.includes(configArr[i])) {
-      isOk = false;
-      stderr.write(`Unknown cipher ${configArr[i]}.\n`);
-    }
-  }
-  if (!isOk) {
-    stderr.write("Please enter correct cipher name.");
-    exit(3);
+
+  if (options.indexOf("-o") === -1 && options.indexOf("--output") === -1) {
+    outputOption = undefined;
+  } else if (options.indexOf("-o") === -1) {
+    outputOption = "--output";
+  } else {
+    outputOption = "-o";
   }
 };
 
-if (options[2] === "-c" || options[2] === "--config") {
-  checkCipherSequence(options[3]);
-} else {
-  stderr.write("Please enter config flag: index.js -c");
-  exit(1);
-}
+let input;
+let output;
 
-for (let i = 0; i < possibleOptions.length; i++) {
-  if (
-    options.indexOf(possibleOptions[i]) !==
-    options.lastIndexOf(possibleOptions[i])
-  ) {
-    stderr.write(`Please, do not duplicate option ${possibleOptions[i]}.`);
-    exit(4);
+const defineInputAndOutputSource = () => {
+  if (inputOption === undefined) {
+    input = stdin;
+  } else {
+    inputFile = options[options.indexOf(inputOption) + 1];
+    input = fs.createReadStream(inputFile, "utf-8");
   }
-}
+  if (outputOption === undefined) {
+    output = stdout;
+  } else {
+    outputFile = options[options.indexOf(outputOption) + 1];
+    output = fs.createWriteStream(outputFile);
+  }
+};
+
+checkConfigOption();
+checkDuplicatedFunctions();
+checkOptions(options);
+defineInputAndOutputSource();
+console.log(inputFile, outputFile);
+
+pipeline(input, output, (err) => {
+  if (err) {
+    input,
+      // TODO
+      output;
+  }
+});
