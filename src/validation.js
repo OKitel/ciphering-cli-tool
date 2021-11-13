@@ -42,6 +42,18 @@ export const checkDuplicatedFunctions = () => {
       exit(4);
     }
   }
+  if (options.includes("-i") && options.includes("--input")) {
+    stderr.write("Please, do not duplicate options -i and --input");
+    exit(4);
+  }
+  if (options.includes("-o") && options.includes("--output")) {
+    stderr.write("Please, do not duplicate options -o and --output");
+    exit(4);
+  }
+  if (options.includes("-c") && options.includes("--config")) {
+    stderr.write("Please, do not duplicate options -c and --config");
+    exit(4);
+  }
 };
 
 export const checkInputOutputValue = (inputOption, outputOption) => {
