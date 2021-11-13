@@ -1,7 +1,7 @@
 import fs from "fs";
 import { stderr } from "process";
 import { pipeline } from "stream";
-import { CeasarDecoder, CeasarEncoder } from "./streams.js";
+import { addTransformStream } from "./streams.js";
 import {
   options,
   checkConfigOption,
@@ -55,7 +55,10 @@ checkDuplicatedFunctions();
 checkOptions(options);
 defineInputAndOutputSource();
 
-pipeline(input, new CeasarEncoder(), new CeasarDecoder(), output, (err) => {
+const cipherSequence = options[3].split("-");
+const transformStreamsSequence = addTransformStream(cipherSequence);
+
+pipeline(input, ...transformStreamsSequence, output, (err) => {
   if (err) {
     stderr.write("There is an error");
   }

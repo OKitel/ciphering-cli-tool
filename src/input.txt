@@ -1,1 +1,1 @@
-"My secret message! Hello!"
+This is secret. Message about "_" symbol!

@@ -3,11 +3,7 @@ import { ceasarEncode, ceasarDecode } from "./ciphers/ceasar.js";
 import { rot8Encode, rot8Decode } from "./ciphers/rot-8.js";
 import { atbashEncode } from "./ciphers/atbash.js";
 
-export const addTransformStream = () => {
-  //TODO
-};
-
-export class CeasarEncoder extends Transform {
+class CeasarEncoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -25,7 +21,7 @@ export class CeasarEncoder extends Transform {
   }
 }
 
-export class CeasarDecoder extends Transform {
+class CeasarDecoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -43,7 +39,7 @@ export class CeasarDecoder extends Transform {
   }
 }
 
-export class Rot8Encoder extends Transform {
+class Rot8Encoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -61,7 +57,7 @@ export class Rot8Encoder extends Transform {
   }
 }
 
-export class Rot8Decoder extends Transform {
+class Rot8Decoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -79,7 +75,7 @@ export class Rot8Decoder extends Transform {
   }
 }
 
-export class AtbashEncoderDecoder extends Transform {
+class AtbashEncoderDecoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -96,3 +92,27 @@ export class AtbashEncoderDecoder extends Transform {
     callback(null, decodedMessage);
   }
 }
+
+export const addTransformStream = (sequence) => {
+  const result = [];
+  for (let i = 0; i < sequence.length; i++) {
+    switch (sequence[i]) {
+      case "C1":
+        result.push(new CeasarEncoder());
+        break;
+      case "C0":
+        result.push(new CeasarDecoder());
+        break;
+      case "R1":
+        result.push(new Rot8Encoder());
+        break;
+      case "R0":
+        result.push(new Rot8Decoder());
+        break;
+      case "A":
+        result.push(new AtbashEncoderDecoder());
+        break;
+    }
+  }
+  return result;
+};
