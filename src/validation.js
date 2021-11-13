@@ -2,9 +2,8 @@ import fs from "fs";
 import path from "path";
 import {
   DuplicatedOptionsError,
-  EmptyCipherConfig,
   MissingConfigError,
-  MissingInputOrOutputValueError,
+  MissingOptionValueError,
   UnknownCipherError,
   FileNotFoundError,
   InputAndOutputSameFilesError,
@@ -15,7 +14,7 @@ const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
 
 const checkCipherSequence = (config) => {
   if (config === "" || config === undefined) {
-    throw new EmptyCipherConfig();
+    throw new MissingOptionValueError("config");
   }
   const configArr = config.split("-");
   for (let i = 0; i < configArr.length; i++) {
@@ -57,11 +56,11 @@ export const checkInputOutputValue = (inputOption, outputOption) => {
   const iFile = options[options.indexOf(inputOption) + 1];
   const oFile = options[options.indexOf(outputOption) + 1];
   if (iFile === undefined) {
-    throw new MissingInputOrOutputValueError("input");
+    throw new MissingOptionValueError("input");
   }
 
   if (oFile === undefined) {
-    throw new MissingInputOrOutputValueError("output");
+    throw new MissingOptionValueError("output");
   }
 
   if (!fs.existsSync(iFile)) {

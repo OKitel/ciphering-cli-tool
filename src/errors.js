@@ -10,19 +10,13 @@ export class MissingConfigError extends Error {
   }
 }
 
-export class EmptyCipherConfig extends Error {
-  constructor() {
-    super("Please enter cipher config");
-  }
-}
-
 export class UnknownCipherError extends Error {
   constructor(msg) {
     super(`Unknown cipher ${msg}.`);
   }
 }
 
-export class MissingInputOrOutputValueError extends Error {
+export class MissingOptionValueError extends Error {
   constructor(msg) {
     super(`Please enter ${msg} value.`);
   }
@@ -36,6 +30,6 @@ export class FileNotFoundError extends Error {
 
 export class InputAndOutputSameFilesError extends Error {
   constructor() {
-    super(`Input and output files should be different.`);
+    super("Input and output files should be different.");
   }
 }
