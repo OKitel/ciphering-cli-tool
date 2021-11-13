@@ -1,5 +1,11 @@
 import fs from "fs";
 import path from "path";
+import {
+  DuplicatedOptionsError,
+  EmptyCipherConfig,
+  MissingConfigError,
+  UnknownCipherError,
+} from "./errors.js";
 const { stderr, exit } = process;
 export const options = process.argv;
 const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
@@ -8,14 +14,13 @@ const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
 const checkCipherSequence = (config) => {
   let isOk = true;
   if (config === "" || config === undefined) {
-    stderr.write("Please enter cipher config.");
-    exit(2);
+    throw new EmptyCipherConfig();
   }
   const configArr = config.split("-");
   for (let i = 0; i < configArr.length; i++) {
     if (!possibleCipher.includes(configArr[i])) {
       isOk = false;
-      stderr.write(`Unknown cipher ${configArr[i]}.\n`);
+      throw new UnknownCipherError(configArr[i]);
     }
   }
   if (!isOk) {
@@ -28,8 +33,7 @@ export const checkConfigOption = () => {
   if (options[2] === "-c" || options[2] === "--config") {
     checkCipherSequence(options[3]);
   } else {
-    stderr.write("Please enter config flag: index.js -c");
-    exit(1);
+    throw new MissingConfigError();
   }
 };
 
@@ -39,21 +43,17 @@ export const checkDuplicatedFunctions = () => {
       options.indexOf(possibleOptions[i]) !==
       options.lastIndexOf(possibleOptions[i])
     ) {
-      stderr.write(`Please, do not duplicate option ${possibleOptions[i]}.`);
-      exit(4);
+      throw new DuplicatedOptionsError(possibleOptions[i], possibleOptions[i]);
     }
   }
   if (options.includes("-i") && options.includes("--input")) {
-    stderr.write("Please, do not duplicate options -i and --input");
-    exit(4);
+    throw new DuplicatedOptionsError("-i", "--input");
   }
   if (options.includes("-o") && options.includes("--output")) {
-    stderr.write("Please, do not duplicate options -o and --output");
-    exit(4);
+    throw new DuplicatedOptionsError("-o", "--output");
   }
   if (options.includes("-c") && options.includes("--config")) {
-    stderr.write("Please, do not duplicate options -c and --config");
-    exit(4);
+    throw new DuplicatedOptionsError("-c", "--config");
   }
 };
 

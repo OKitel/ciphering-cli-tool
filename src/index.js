@@ -54,11 +54,16 @@ const defineInputAndOutputSource = () => {
   }
 };
 
-checkConfigOption();
-checkDuplicatedFunctions();
-checkOptions(options);
-checkInputOutputValue(inputOption, outputOption);
-defineInputAndOutputSource();
+try {
+  checkConfigOption();
+  checkDuplicatedFunctions();
+  checkOptions(options);
+  checkInputOutputValue(inputOption, outputOption);
+  defineInputAndOutputSource();
+} catch (e) {
+  stderr.write(e.message);
+  exit(9);
+}
 
 const cipherSequence = options[3].split("-");
 const transformStreamsSequence = addTransformStream(cipherSequence);
