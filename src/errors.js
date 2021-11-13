@@ -21,3 +21,21 @@ export class UnknownCipherError extends Error {
     super(`Unknown cipher ${msg}.`);
   }
 }
+
+export class MissingInputOrOutputValueError extends Error {
+  constructor(msg) {
+    super(`Please enter ${msg} value.`);
+  }
+}
+
+export class FileNotFoundError extends Error {
+  constructor(file, msg) {
+    super(`File ${file} doesn't exist. Please enter correct ${msg} value.`);
+  }
+}
+
+export class InputAndOutputSameFilesError extends Error {
+  constructor() {
+    super(`Input and output files should be different.`);
+  }
+}

@@ -4,28 +4,24 @@ import {
   DuplicatedOptionsError,
   EmptyCipherConfig,
   MissingConfigError,
+  MissingInputOrOutputValueError,
   UnknownCipherError,
+  FileNotFoundError,
+  InputAndOutputSameFilesError,
 } from "./errors.js";
-const { stderr, exit } = process;
 export const options = process.argv;
 const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
 const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
 
 const checkCipherSequence = (config) => {
-  let isOk = true;
   if (config === "" || config === undefined) {
     throw new EmptyCipherConfig();
   }
   const configArr = config.split("-");
   for (let i = 0; i < configArr.length; i++) {
     if (!possibleCipher.includes(configArr[i])) {
-      isOk = false;
       throw new UnknownCipherError(configArr[i]);
     }
-  }
-  if (!isOk) {
-    stderr.write("Please enter correct cipher name.");
-    exit(3);
   }
 };
 
@@ -61,31 +57,22 @@ export const checkInputOutputValue = (inputOption, outputOption) => {
   const iFile = options[options.indexOf(inputOption) + 1];
   const oFile = options[options.indexOf(outputOption) + 1];
   if (iFile === undefined) {
-    stderr.write("Please enter input value.");
-    exit(3);
+    throw new MissingInputOrOutputValueError("input");
   }
 
   if (oFile === undefined) {
-    stderr.write("Please enter output value.");
-    exit(3);
+    throw new MissingInputOrOutputValueError("output");
   }
 
   if (!fs.existsSync(iFile)) {
-    stderr.write(
-      `File ${iFile} doesn't exist. Please enter correct input value.`
-    );
-    exit(3);
+    throw new FileNotFoundError(iFile, "input");
   }
   if (!fs.existsSync(oFile)) {
-    stderr.write(
-      `File ${oFile} doesn't exist. Please enter correct output value.`
-    );
-    exit(3);
+    throw new FileNotFoundError(oFile, "output");
   }
   if (inputOption !== undefined && outputOption !== undefined) {
     if (path.resolve(iFile) === path.resolve(oFile)) {
-      stderr.write("Input and output files should be different.");
-      exit(7);
+      throw new InputAndOutputSameFilesError();
     }
   }
 };
