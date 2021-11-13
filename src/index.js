@@ -17,6 +17,8 @@ let inputOption;
 let outputOption;
 let inputFile;
 let outputFile;
+let input;
+let output;
 
 const checkOptions = (options) => {
   if (options.indexOf("-i") === -1 && options.indexOf("--input") === -1) {
@@ -35,9 +37,6 @@ const checkOptions = (options) => {
     outputOption = "-o";
   }
 };
-
-let input;
-let output;
 
 const defineInputAndOutputSource = () => {
   if (inputOption === undefined) {
