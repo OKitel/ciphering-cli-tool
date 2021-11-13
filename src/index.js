@@ -1,7 +1,10 @@
-import fs from "fs";
 import { exit, stderr } from "process";
 import { pipeline } from "stream";
-import { addTransformStream } from "./streams.js";
+import {
+  addTransformStream,
+  MyWritableStream,
+  MyReadableStream,
+} from "./streams.js";
 import {
   options,
   checkConfigOption,
@@ -41,13 +44,13 @@ const defineInputAndOutputSource = () => {
     input = stdin;
   } else {
     inputFile = options[options.indexOf(inputOption) + 1];
-    input = fs.createReadStream(inputFile, "utf-8");
+    input = new MyReadableStream(inputFile);
   }
   if (outputOption === undefined) {
     output = stdout;
   } else {
     outputFile = options[options.indexOf(outputOption) + 1];
-    output = fs.createWriteStream(outputFile, { flags: "a" });
+    output = new MyWritableStream(outputFile, { flags: "a" });
   }
 };
 

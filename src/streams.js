@@ -1,7 +1,49 @@
-import { Transform } from "stream";
+import fs from "fs";
+import { Transform, Writable, Readable } from "stream";
 import { ceasarEncode, ceasarDecode } from "./ciphers/ceasar.js";
 import { rot8Encode, rot8Decode } from "./ciphers/rot-8.js";
 import { atbashEncode } from "./ciphers/atbash.js";
+
+export class MyWritableStream extends Writable {
+  constructor(filePath, options) {
+    super(options);
+    this.filePath = filePath;
+  }
+
+  _write(chunk, enc, next) {
+    fs.appendFile(this.filePath, chunk, (err) => {
+      if (err) throw err;
+      next();
+    });
+  }
+}
+
+export class MyReadableStream extends Readable {
+  constructor(filePath) {
+    super();
+    this.filePath = filePath;
+    this.fd = null;
+  }
+
+  _construct(cb) {
+    fs.open(this.filePath, (err, fd) => {
+      if (err) {
+        cb(err);
+      } else {
+        this.fd = fd;
+        cb();
+      }
+    });
+  }
+
+  _read(n) {
+    const buf = Buffer.alloc(n);
+    fs.read(this.fd, buf, 0, n, null, (err, bytesRead) => {
+      if (err) throw err;
+      this.push(bytesRead > 0 ? buf.slice(0, bytesRead) : null);
+    });
+  }
+}
 
 class CeasarEncoder extends Transform {
   constructor(options) {
