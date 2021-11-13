@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 const { stderr, exit } = process;
 export const options = process.argv;
 const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
@@ -80,5 +81,11 @@ export const checkInputOutputValue = (inputOption, outputOption) => {
       `File ${oFile} doesn't exist. Please enter correct output value.`
     );
     exit(3);
+  }
+  if (inputOption !== undefined && outputOption !== undefined) {
+    if (path.resolve(iFile) === path.resolve(oFile)) {
+      stderr.write("Input and output files should be different.");
+      exit(7);
+    }
   }
 };
