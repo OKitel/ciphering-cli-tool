@@ -1,3 +1,4 @@
+import fs from "fs";
 const { stderr, exit } = process;
 export const options = process.argv;
 const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
@@ -40,5 +41,32 @@ export const checkDuplicatedFunctions = () => {
       stderr.write(`Please, do not duplicate option ${possibleOptions[i]}.`);
       exit(4);
     }
+  }
+};
+
+export const checkInputOutputValue = (inputOption, outputOption) => {
+  const iFile = options[options.indexOf(inputOption) + 1];
+  const oFile = options[options.indexOf(outputOption) + 1];
+  if (iFile === undefined) {
+    stderr.write("Please enter input value.");
+    exit(3);
+  }
+
+  if (oFile === undefined) {
+    stderr.write("Please enter output value.");
+    exit(3);
+  }
+
+  if (!fs.existsSync(iFile)) {
+    stderr.write(
+      `File ${iFile} doesn't exist. Please enter correct input value.`
+    );
+    exit(3);
+  }
+  if (!fs.existsSync(oFile)) {
+    stderr.write(
+      `File ${oFile} doesn't exist. Please enter correct output value.`
+    );
+    exit(3);
   }
 };

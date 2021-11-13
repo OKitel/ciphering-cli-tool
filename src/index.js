@@ -1,10 +1,11 @@
 import fs from "fs";
-import { stderr } from "process";
+import { exit, stderr } from "process";
 import { pipeline } from "stream";
 import { addTransformStream } from "./streams.js";
 import {
   options,
   checkConfigOption,
+  checkInputOutputValue,
   checkDuplicatedFunctions,
 } from "./validation.js";
 const { stdin, stdout } = process;
@@ -53,6 +54,7 @@ const defineInputAndOutputSource = () => {
 checkConfigOption();
 checkDuplicatedFunctions();
 checkOptions(options);
+checkInputOutputValue(inputOption, outputOption);
 defineInputAndOutputSource();
 
 const cipherSequence = options[3].split("-");
@@ -60,6 +62,7 @@ const transformStreamsSequence = addTransformStream(cipherSequence);
 
 pipeline(input, ...transformStreamsSequence, output, (err) => {
   if (err) {
-    stderr.write("There is an error");
+    stderr.write(`There is an error: ${err}`);
+    exit(5);
   }
 });
