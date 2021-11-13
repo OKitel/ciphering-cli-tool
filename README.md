@@ -1,3 +1,5 @@
+![node.js](https://img.shields.io/badge/node.js-16.x-green)
+
 # Ciphering CLI tool
 
 ### CLI tool that encodes and decode a text by 3 substitution ciphers
@@ -14,6 +16,7 @@ To launch ciphering CLI tool you need:
 
 1. fork this repository
 1. clone it to your PC
+1. download [node.js](https://nodejs.org/en/)
 1. using terminal start index.js with node
 
 #### Docs:
