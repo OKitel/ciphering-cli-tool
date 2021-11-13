@@ -20,14 +20,3 @@ export const atbashEncode = (message) => {
   }
   return result.join("");
 };
-
-export const atbashDecode = atbashEncode;
-
-const { stdin, stdout } = process;
-stdin.on("data", (data) => {
-  const dataStringified = data.toString();
-  const encodedMessage = atbashEncode(dataStringified);
-  stdout.write(encodedMessage);
-  stdout.write(atbashDecode(encodedMessage));
-  process.exit();
-});

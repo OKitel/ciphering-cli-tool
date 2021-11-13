@@ -29,11 +29,3 @@ const cipherInternal = (shift, message) => {
   }
   return result.join("");
 };
-const { stdin, stdout } = process;
-stdin.on("data", (data) => {
-  const dataStringified = data.toString();
-  const encodedMessage = rot8Encode(dataStringified);
-  stdout.write(encodedMessage);
-  stdout.write(rot8Decode(encodedMessage));
-  process.exit();
-});

@@ -29,12 +29,3 @@ const cipherInternal = (shift, message) => {
   }
   return result.join("");
 };
-
-const { stdin, stdout } = process;
-stdin.on("data", (data) => {
-  const dataStringified = data.toString();
-  const encodedMessage = ceasarEncode(dataStringified);
-  stdout.write(encodedMessage);
-  stdout.write(ceasarDecode(encodedMessage));
-  process.exit();
-});
