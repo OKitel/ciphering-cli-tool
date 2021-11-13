@@ -9,10 +9,6 @@ import {
 } from "./validation.js";
 const { stdin, stdout } = process;
 
-// import { ceasarEncode, ceasarDecode } from "./ciphers/ceasar";
-// import { rot8Encode, rot8Decode } from "./ciphers/rot-8";
-// import { atbashEncode, atbashDecode } from "./ciphers/atbash";
-
 let inputOption;
 let outputOption;
 let inputFile;
