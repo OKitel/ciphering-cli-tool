@@ -1,11 +1,18 @@
 import fs from "fs";
+import { stderr } from "process";
 import { pipeline } from "stream";
+import { CeasarDecoder, CeasarEncoder } from "./streams.js";
 import {
   options,
   checkConfigOption,
   checkDuplicatedFunctions,
 } from "./validation.js";
 const { stdin, stdout } = process;
+
+// import { ceasarEncode, ceasarDecode } from "./ciphers/ceasar";
+// import { rot8Encode, rot8Decode } from "./ciphers/rot-8";
+// import { atbashEncode, atbashDecode } from "./ciphers/atbash";
+
 let inputOption;
 let outputOption;
 let inputFile;
@@ -43,7 +50,7 @@ const defineInputAndOutputSource = () => {
     output = stdout;
   } else {
     outputFile = options[options.indexOf(outputOption) + 1];
-    output = fs.createWriteStream(outputFile);
+    output = fs.createWriteStream(outputFile, { flags: "a" });
   }
 };
 
@@ -51,12 +58,9 @@ checkConfigOption();
 checkDuplicatedFunctions();
 checkOptions(options);
 defineInputAndOutputSource();
-console.log(inputFile, outputFile);
 
-pipeline(input, output, (err) => {
+pipeline(input, new CeasarEncoder(), new CeasarDecoder(), output, (err) => {
   if (err) {
-    input,
-      // TODO
-      output;
+    stderr.write("There is an error");
   }
 });
