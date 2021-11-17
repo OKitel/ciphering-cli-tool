@@ -4,7 +4,8 @@
   "description": "CLI tool that encode and decode a text by 3 substitution ciphers",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:cover": "jest --coverage",
     "lint": "eslint . --ext .js"
   },
   "repository": {
@@ -21,6 +22,7 @@
   "devDependencies": {
     "eslint": "^8.2.0",
     "eslint-plugin-node": "^11.1.0",
+    "jest": "^27.3.1",
     "nodemon": "^2.0.14",
     "prettier": "^2.4.1",
     "eslint-config-prettier": "^7.2.0",
