@@ -54,7 +54,7 @@ class CeasarEncoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const encodedMessage = ceasarEncode(chunkStringified);
@@ -72,7 +72,7 @@ class CeasarDecoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = ceasarDecode(chunkStringified);
@@ -90,7 +90,7 @@ class Rot8Encoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = rot8Encode(chunkStringified);
@@ -108,7 +108,7 @@ class Rot8Decoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = rot8Decode(chunkStringified);
@@ -126,7 +126,7 @@ class AtbashEncoderDecoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = atbashEncode(chunkStringified);
