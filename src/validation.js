@@ -56,22 +56,28 @@ export const checkDuplicatedFunctions = (options) => {
 };
 
 export const checkInputOutputValue = (inputOption, outputOption, options) => {
-  const iFile = options[options.indexOf(inputOption) + 1];
-  const oFile = options[options.indexOf(outputOption) + 1];
-  if (iFile === undefined) {
-    throw new MissingOptionValueError("input");
+  let iFile;
+  let oFile;
+  if (inputOption !== undefined) {
+    iFile = options[options.indexOf(inputOption) + 1];
+    if (iFile === undefined) {
+      throw new MissingOptionValueError("input");
+    }
+    if (!fs.existsSync(iFile)) {
+      throw new FileNotFoundError(iFile, "input");
+    }
   }
 
-  if (oFile === undefined) {
-    throw new MissingOptionValueError("output");
+  if (outputOption !== undefined) {
+    oFile = options[options.indexOf(outputOption) + 1];
+    if (oFile === undefined) {
+      throw new MissingOptionValueError("output");
+    }
+    if (!fs.existsSync(oFile)) {
+      throw new FileNotFoundError(oFile, "output");
+    }
   }
 
-  if (!fs.existsSync(iFile)) {
-    throw new FileNotFoundError(iFile, "input");
-  }
-  if (!fs.existsSync(oFile)) {
-    throw new FileNotFoundError(oFile, "output");
-  }
   if (inputOption !== undefined && outputOption !== undefined) {
     if (path.resolve(iFile) === path.resolve(oFile)) {
       throw new InputAndOutputSameFilesError();
