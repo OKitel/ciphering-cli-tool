@@ -8,11 +8,9 @@ import {
   FileNotFoundError,
   InputAndOutputSameFilesError,
 } from "./errors.js";
-import { options } from "./options.js";
-const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
-const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
 
 const checkCipherSequence = (config) => {
+  const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
   if (config === "" || config === undefined) {
     throw new MissingOptionValueError("config");
   }
@@ -24,7 +22,7 @@ const checkCipherSequence = (config) => {
   }
 };
 
-export const checkConfigOption = () => {
+export const checkConfigOption = (options) => {
   if (options.includes("-c") || options.includes("--config")) {
     const configIndex =
       options.indexOf("-c") !== -1
@@ -36,7 +34,8 @@ export const checkConfigOption = () => {
   }
 };
 
-export const checkDuplicatedFunctions = () => {
+export const checkDuplicatedFunctions = (options) => {
+  const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
   for (let i = 0; i < possibleOptions.length; i++) {
     if (
       options.indexOf(possibleOptions[i]) !==
@@ -56,7 +55,7 @@ export const checkDuplicatedFunctions = () => {
   }
 };
 
-export const checkInputOutputValue = (inputOption, outputOption) => {
+export const checkInputOutputValue = (inputOption, outputOption, options) => {
   const iFile = options[options.indexOf(inputOption) + 1];
   const oFile = options[options.indexOf(outputOption) + 1];
   if (iFile === undefined) {

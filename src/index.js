@@ -1,4 +1,3 @@
-import { exit, stderr } from "process";
 import { pipeline } from "stream";
 import {
   addTransformStream,
@@ -11,16 +10,10 @@ import {
   checkDuplicatedFunctions,
 } from "./validation.js";
 import { options } from "./options.js";
-const { stdin, stdout } = process;
-
-let inputOption;
-let outputOption;
-let inputFile;
-let outputFile;
-let input;
-let output;
 
 const checkOptions = (options) => {
+  let inputOption;
+  let outputOption;
   if (options.indexOf("-i") === -1 && options.indexOf("--input") === -1) {
     inputOption = undefined;
   } else if (options.indexOf("-i") === -1) {
@@ -36,9 +29,16 @@ const checkOptions = (options) => {
   } else {
     outputOption = "-o";
   }
+
+  return { inputOption, outputOption };
 };
 
-const defineInputAndOutputSource = () => {
+const defineInputAndOutputSource = (inputOption, outputOption) => {
+  const { stdin, stdout } = process;
+  let input;
+  let output;
+  let inputFile;
+  let outputFile;
   if (inputOption === undefined) {
     input = stdin;
   } else {
@@ -51,25 +51,33 @@ const defineInputAndOutputSource = () => {
     outputFile = options[options.indexOf(outputOption) + 1];
     output = new MyWritableStream(outputFile, { flags: "a" });
   }
+  return { input, output };
 };
 
-try {
-  checkConfigOption();
-  checkDuplicatedFunctions();
-  checkOptions(options);
-  checkInputOutputValue(inputOption, outputOption);
-  defineInputAndOutputSource();
-} catch (e) {
-  stderr.write(e.message);
-  exit(9);
-}
+export const mainFunc = () => {
+  const { stderr, exit } = process;
+  try {
+    checkConfigOption(options);
+    checkDuplicatedFunctions(options);
+    const { inputOption, outputOption } = checkOptions(options);
+    checkInputOutputValue(inputOption, outputOption, options);
+    const { input, output } = defineInputAndOutputSource(
+      inputOption,
+      outputOption
+    );
+    const cipherSequence = options[3].split("-");
+    const transformStreamsSequence = addTransformStream(cipherSequence);
 
-const cipherSequence = options[3].split("-");
-const transformStreamsSequence = addTransformStream(cipherSequence);
-
-pipeline(input, ...transformStreamsSequence, output, (err) => {
-  if (err) {
-    stderr.write(`There is an error: ${err}`);
-    exit(5);
+    pipeline(input, ...transformStreamsSequence, output, (err) => {
+      if (err) {
+        stderr.write(`There is an error: ${err}`);
+        exit(5);
+      }
+    });
+  } catch (e) {
+    stderr.write(e.message);
+    exit(9);
   }
-});
+};
+
+mainFunc();
