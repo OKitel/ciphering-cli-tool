@@ -6,11 +6,11 @@ import {
   MyReadableStream,
 } from "./streams.js";
 import {
-  options,
   checkConfigOption,
   checkInputOutputValue,
   checkDuplicatedFunctions,
 } from "./validation.js";
+import { options } from "./options.js";
 const { stdin, stdout } = process;
 
 let inputOption;

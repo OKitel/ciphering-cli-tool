@@ -8,7 +8,7 @@ import {
   FileNotFoundError,
   InputAndOutputSameFilesError,
 } from "./errors.js";
-export const options = process.argv;
+import { options } from "./options.js";
 const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
 const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
 
@@ -25,8 +25,12 @@ const checkCipherSequence = (config) => {
 };
 
 export const checkConfigOption = () => {
-  if (options[2] === "-c" || options[2] === "--config") {
-    checkCipherSequence(options[3]);
+  if (options.includes("-c") || options.includes("--config")) {
+    const configIndex =
+      options.indexOf("-c") !== -1
+        ? options.indexOf("-c")
+        : options.indexOf("--config");
+    checkCipherSequence(options[configIndex + 1]);
   } else {
     throw new MissingConfigError();
   }
