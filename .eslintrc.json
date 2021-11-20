@@ -15,7 +15,8 @@
   },
   "rules": {
     "import/prefer-default-export": "off",
-    "no-process-exit": "off"
+    "no-process-exit": "off",
+    "jest/no-done-callback": "off"
   },
   "plugins": ["jest", "node", "prettier"]
 }
