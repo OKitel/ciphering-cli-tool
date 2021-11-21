@@ -37,29 +37,14 @@ describe("check MyWritableStream", () => {
 
 describe("check MyReadableStream", () => {
   test("defines read()", () => {
-    const myReadableStream = new MyReadableStream("./src/intput.txt");
+    const myReadableStream = new MyReadableStream("./src/input.txt");
     expect(typeof myReadableStream.read).toBe("function");
   });
 
   test("should return readable stream", () => {
-    const myReadableStream = new MyReadableStream("./src/intput.txt");
+    const myReadableStream = new MyReadableStream("./src/input.txt");
     expect(myReadableStream).toBeInstanceOf(Readable);
   });
-});
-
-test("check MyReadableStream", () => {
-  const myReadableStream = jest.fn();
-  const mMock = jest.fn();
-
-  myReadableStream.mockImplementation(() => {
-    return {
-      m: mMock,
-    };
-  });
-
-  const some = new myReadableStream();
-  some.m("a", "b");
-  expect(mMock.mock.calls).toEqual([["a", "b"]]);
 });
 
 test("should transform data by CeasarEncoder", async () => {
