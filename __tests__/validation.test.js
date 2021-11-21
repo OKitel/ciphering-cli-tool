@@ -34,7 +34,7 @@ describe("check config options", () => {
 });
 
 describe("check duplicated options", () => {
-  test("should throw error if options are duplicated", () => {
+  test("should throw error if input options are duplicated", () => {
     expect(() =>
       checkDuplicatedFunctions([
         "node",
@@ -49,6 +49,9 @@ describe("check duplicated options", () => {
         "./src/input1.txt",
       ])
     ).toThrowError();
+  });
+
+  test("should throw error if output options are duplicated", () => {
     expect(() =>
       checkDuplicatedFunctions([
         "node",
@@ -63,6 +66,9 @@ describe("check duplicated options", () => {
         "./src/output1.txt",
       ])
     ).toThrowError();
+  });
+
+  test("should throw error if config (-c and --config) options are duplicated", () => {
     expect(() =>
       checkDuplicatedFunctions([
         "node",
@@ -77,6 +83,9 @@ describe("check duplicated options", () => {
         "A-R0",
       ])
     ).toThrowError();
+  });
+
+  test("should throw error if config (-c and -c) options are duplicated", () => {
     expect(() =>
       checkDuplicatedFunctions([
         "node",
@@ -93,7 +102,7 @@ describe("check duplicated options", () => {
     ).toThrowError();
   });
 
-  test("should not throw errors if everything is ok", () => {
+  test("should not throw errors if all options are correct", () => {
     expect(() => {
       checkDuplicatedFunctions([
         "node",
