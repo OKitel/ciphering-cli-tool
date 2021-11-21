@@ -4,8 +4,8 @@
   "description": "CLI tool that encode and decode a text by 3 substitution ciphers",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:cover": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test": "jest",
+    "test:cover": "jest --coverage",
     "lint": "eslint . --ext .js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/OKitel/ciphering-cli-tool#readme",
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.16.0",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-jest": "^25.2.4",
@@ -32,5 +33,17 @@
   "engines": {
     "node": ">= 15.0.0",
     "npm": ">= 6.14.4"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
   }
 }
