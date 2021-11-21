@@ -33,3 +33,9 @@ export class InputAndOutputSameFilesError extends Error {
     super("Input and output files should be different.");
   }
 }
+
+export class RequiredParameterisNullError extends Error {
+  constructor(param) {
+    super(`Required ${param} is null.`);
+  }
+}

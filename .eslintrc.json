@@ -1,14 +1,23 @@
 {
   "env": {
     "node": true,
-    "es2021": true
+    "es2021": true,
+    "jest": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "plugin:node/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
   },
   "rules": {
-    "import/prefer-default-export": "off"
-  }
+    "import/prefer-default-export": "off",
+    "no-process-exit": "off",
+    "jest/no-done-callback": "off",
+    "node/no-extraneous-import": "off"
+  },
+  "plugins": ["jest", "node", "prettier"]
 }

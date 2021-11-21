@@ -8,11 +8,9 @@ import {
   FileNotFoundError,
   InputAndOutputSameFilesError,
 } from "./errors.js";
-export const options = process.argv;
-const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
-const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
 
 const checkCipherSequence = (config) => {
+  const possibleCipher = ["C0", "C1", "R0", "R1", "A"];
   if (config === "" || config === undefined) {
     throw new MissingOptionValueError("config");
   }
@@ -24,15 +22,21 @@ const checkCipherSequence = (config) => {
   }
 };
 
-export const checkConfigOption = () => {
-  if (options[2] === "-c" || options[2] === "--config") {
-    checkCipherSequence(options[3]);
+export const checkConfigOption = (options) => {
+  if (options.includes("-c") || options.includes("--config")) {
+    const configIndex =
+      options.indexOf("-c") !== -1
+        ? options.indexOf("-c")
+        : options.indexOf("--config");
+    checkCipherSequence(options[configIndex + 1]);
+    return { configIndex };
   } else {
     throw new MissingConfigError();
   }
 };
 
-export const checkDuplicatedFunctions = () => {
+export const checkDuplicatedFunctions = (options) => {
+  const possibleOptions = ["-c", "--config", "-i", "--input", "-o", "--output"];
   for (let i = 0; i < possibleOptions.length; i++) {
     if (
       options.indexOf(possibleOptions[i]) !==
@@ -52,23 +56,29 @@ export const checkDuplicatedFunctions = () => {
   }
 };
 
-export const checkInputOutputValue = (inputOption, outputOption) => {
-  const iFile = options[options.indexOf(inputOption) + 1];
-  const oFile = options[options.indexOf(outputOption) + 1];
-  if (iFile === undefined) {
-    throw new MissingOptionValueError("input");
+export const checkInputOutputValue = (inputOption, outputOption, options) => {
+  let iFile;
+  let oFile;
+  if (inputOption !== undefined) {
+    iFile = options[options.indexOf(inputOption) + 1];
+    if (iFile === undefined) {
+      throw new MissingOptionValueError("input");
+    }
+    if (!fs.existsSync(iFile)) {
+      throw new FileNotFoundError(iFile, "input");
+    }
   }
 
-  if (oFile === undefined) {
-    throw new MissingOptionValueError("output");
+  if (outputOption !== undefined) {
+    oFile = options[options.indexOf(outputOption) + 1];
+    if (oFile === undefined) {
+      throw new MissingOptionValueError("output");
+    }
+    if (!fs.existsSync(oFile)) {
+      throw new FileNotFoundError(oFile, "output");
+    }
   }
 
-  if (!fs.existsSync(iFile)) {
-    throw new FileNotFoundError(iFile, "input");
-  }
-  if (!fs.existsSync(oFile)) {
-    throw new FileNotFoundError(oFile, "output");
-  }
   if (inputOption !== undefined && outputOption !== undefined) {
     if (path.resolve(iFile) === path.resolve(oFile)) {
       throw new InputAndOutputSameFilesError();

@@ -3,9 +3,13 @@ import { Transform, Writable, Readable } from "stream";
 import { ceasarEncode, ceasarDecode } from "./ciphers/ceasar.js";
 import { rot8Encode, rot8Decode } from "./ciphers/rot-8.js";
 import { atbashEncode } from "./ciphers/atbash.js";
+import { RequiredParameterisNullError } from "./errors.js";
 
 export class MyWritableStream extends Writable {
   constructor(filePath, options) {
+    if (!filePath) {
+      throw new RequiredParameterisNullError("filePath");
+    }
     super(options);
     this.filePath = filePath;
   }
@@ -21,6 +25,9 @@ export class MyWritableStream extends Writable {
 export class MyReadableStream extends Readable {
   constructor(filePath) {
     super();
+    if (!filePath) {
+      throw new RequiredParameterisNullError("filePath");
+    }
     this.filePath = filePath;
     this.fd = null;
   }
@@ -45,7 +52,7 @@ export class MyReadableStream extends Readable {
   }
 }
 
-class CeasarEncoder extends Transform {
+export class CeasarEncoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -54,7 +61,7 @@ class CeasarEncoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const encodedMessage = ceasarEncode(chunkStringified);
@@ -63,7 +70,7 @@ class CeasarEncoder extends Transform {
   }
 }
 
-class CeasarDecoder extends Transform {
+export class CeasarDecoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -72,7 +79,7 @@ class CeasarDecoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = ceasarDecode(chunkStringified);
@@ -81,7 +88,7 @@ class CeasarDecoder extends Transform {
   }
 }
 
-class Rot8Encoder extends Transform {
+export class Rot8Encoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -90,7 +97,7 @@ class Rot8Encoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = rot8Encode(chunkStringified);
@@ -99,7 +106,7 @@ class Rot8Encoder extends Transform {
   }
 }
 
-class Rot8Decoder extends Transform {
+export class Rot8Decoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -108,7 +115,7 @@ class Rot8Decoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = rot8Decode(chunkStringified);
@@ -117,7 +124,7 @@ class Rot8Decoder extends Transform {
   }
 }
 
-class AtbashEncoderDecoder extends Transform {
+export class AtbashEncoderDecoder extends Transform {
   constructor(options) {
     super(options);
   }
@@ -126,7 +133,7 @@ class AtbashEncoderDecoder extends Transform {
     const chunkStringified = chunk.toString();
 
     if (chunkStringified === "\u0003") {
-      process.exit();
+      process.exit(5);
     }
 
     const decodedMessage = atbashEncode(chunkStringified);
