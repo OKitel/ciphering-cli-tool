@@ -29,6 +29,7 @@ export const checkConfigOption = (options) => {
         ? options.indexOf("-c")
         : options.indexOf("--config");
     checkCipherSequence(options[configIndex + 1]);
+    return { configIndex };
   } else {
     throw new MissingConfigError();
   }

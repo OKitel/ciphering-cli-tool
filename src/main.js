@@ -11,7 +11,7 @@ import { checkOptions, defineInputAndOutputSource } from "./utils.js";
 export const mainFunc = (options) => {
   const { stderr, exit } = process;
   try {
-    checkConfigOption(options);
+    const { configIndex } = checkConfigOption(options);
     checkDuplicatedFunctions(options);
     const { inputOption, outputOption } = checkOptions(options);
     checkInputOutputValue(inputOption, outputOption, options);
@@ -20,7 +20,7 @@ export const mainFunc = (options) => {
       inputOption,
       outputOption
     );
-    const cipherSequence = options[3].split("-");
+    const cipherSequence = options[configIndex + 1].split("-");
     const transformStreamsSequence = addTransformStream(cipherSequence);
 
     pipeline(input, ...transformStreamsSequence, output, (err) => {

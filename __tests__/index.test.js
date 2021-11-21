@@ -33,6 +33,38 @@ describe("testing all cli with child process", () => {
     });
   });
 
+  test("should return correct answer when all arguments are valid with options rearangement", (done) => {
+    const INPUT_TO_CLI = [
+      "./src/index.js",
+      "-i",
+      "./src/input.txt",
+      "-c",
+      "C0-R1-A",
+    ];
+    const EXPECTED_OUTPUT = 'Zlka ka aoqboz. Goaasmo sreyz "_" augreh!';
+
+    const cp = spawn("node", INPUT_TO_CLI);
+
+    let res = "";
+
+    cp.stdout.on("data", (chunk) => {
+      res += chunk.toString();
+    });
+
+    cp.stderr.on("data", (chunk) => {
+      res += chunk.toString();
+    });
+
+    cp.stdout.on("end", () => {
+      try {
+        expect(res).toBe(EXPECTED_OUTPUT);
+        done();
+      } catch (err) {
+        done(err);
+      }
+    });
+  });
+
   test("should return correct answer fro usage example #1", (done) => {
     const INPUT_TO_CLI = [
       "./src/index.js",

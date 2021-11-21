@@ -22,7 +22,7 @@ jest.mock("../src/utils.js", () => ({
   }),
 }));
 jest.mock("../src/validation.js", () => ({
-  checkConfigOption: jest.fn(),
+  checkConfigOption: jest.fn(() => ({ configIndex: 2 })),
   checkDuplicatedFunctions: jest.fn(),
   checkInputOutputValue: jest.fn(),
 }));
@@ -67,7 +67,9 @@ test("check pipeline with error", () => {
   mockStream.pipeline.mockImplementation((...args) =>
     args[args.length - 1]("Some error")
   );
-  mockValidation.checkConfigOption.mockImplementation(() => {});
+  mockValidation.checkConfigOption.mockImplementation(() => ({
+    configIndex: 2,
+  }));
   mainFunc(["node", "./src/index.js", "-c", "C0-C1", "-i", "./src/input.txt"]);
   expect(spyExit).toHaveBeenCalledWith(5);
   spyExit.mockRestore();
